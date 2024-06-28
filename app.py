@@ -53,37 +53,62 @@ else:
     st.success("Image uploaded successfully!")
 st.divider()
 
+col1, col2 = st.columns(2)
+
 # Input 2: Select the social media platform
-st.subheader("Select the Social Media Platform")
-social_media_platform = st.selectbox(
+col1.subheader("Select the Social Media Platform 🌐")
+social_media_platform = col1.selectbox(
     "Select the Social Media Platform",
     ["Instagram", "Facebook", "Twitter", "LinkedIn", "Pinterest"],
 )
-st.divider()
+col1.divider()
 
 # Input 3: Creativity Level (Temperature)
-st.subheader("Creativity Level")
-creativity = st.radio(
+col2.subheader("Creativity Level 🪄")
+creativity = col2.radio(
     "How creative do you want the captions to be?",
     ('Low', 'Medium', 'High')
 )
 # Map creativity level to temperature
-creativity_map = {
-    'Low':0.5,
-    'Medium':0.75,
-    'High':1.0
+# creativity_map = {
+#     'Low':0.5,
+#     'Medium':0.75,
+#     'High':1.0
+# }
+# temperature = creativity_map[creativity]
+col2.divider()
+
+# Input 4: Emoji Usage
+col1.subheader("Emoji Usage 😎")
+emoji_usage = col1.radio("Do you want to use emojis in the captions?", ('Yes', 'No'))
+use_emojis = emoji_usage == 'Yes'
+col1.divider()
+
+# Input 5: Hashtags
+col2.subheader("Hashtags '#'")
+hashtags = col2.radio("Do you want to include hashtags in the captions?", ('Yes', 'No'))
+use_hashtags = hashtags == 'Yes'
+col2.divider()
+
+# Input 6: Size of the captions
+col1.subheader("Caption Length 📏")
+caption_length = col1.radio("Select the length of the captions", ('Short', 'Medium', 'Long'))
+caption_length_map = {
+    'Short': 50,
+    'Medium': 100,
+    'Long': 150
 }
-temperature = creativity_map[creativity]
+max_tokens = caption_length_map[caption_length]
+
+# Input 7: Number of Captions user wants
+col2.subheader("Number of Captions 7️⃣")
+num_captions = col2.slider("Select the number of captions", min_value=1, max_value=10, value=5)
+
 st.divider()
 
-# Input 4: Number of Captions user wants
-st.subheader("Number of Captions")
-num_captions = st.slider("Select the number of captions", min_value=1, max_value=10, value=5)
-st.divider()
 
-
-# Input 5: User Input Prompts
-st.subheader("User Input Prompts")
+# Input 8: User Input Prompts
+st.subheader("User Input Prompts 🖊️")
 user_input_prompts = st.text_area("Enter the description or prompts for the image")
 st.divider()
 
@@ -93,12 +118,11 @@ if st.button("Generate Captions"):
         st.warning("Please upload an image or capture one.")
 
     else:
-        st.write("Generating Captions...")
-
         # Define prebuild prompts
-        complete_prompt = f'''{user_input_prompts}. Generate {num_captions} captions for the image for {social_media_platform} platform.
-        Analyse the image and generate creative captions for my social media post. Use some trending hashtags for the post. Don't give too
-        large captions. Keeps it short and simple. The image is related to {social_media_platform} platform.'''
+        complete_prompt = f'''{user_input_prompts}. Generate {num_captions} captions for the image, for {social_media_platform} platform.
+        Analyse the image and generate creative captions for my social media post. Use some trending hashtags and emojies for the post. 
+        Use {max_tokens} words for each caption. Maintain the captions creativity level as {creativity}. The image is related to 
+        {social_media_platform} platform.'''
 
         # Convert uploaded image to bytes
         image = Image.open(uploaded_file)
