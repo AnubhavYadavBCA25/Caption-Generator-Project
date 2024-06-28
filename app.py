@@ -3,15 +3,25 @@ import requests
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
+from PIL import Image
+from IPython.display import Markdown
+import textwrap
 
 load_dotenv()
+
+# Function to convert text to markdown
+def to_markdown(text):
+  text = text.replace('•', '  *')
+  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
 
 # Set up the API key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 
 # Model selection
-model = genai.GenerativeModel("gemini-pro-vision")
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+## Streamlit App ##
 
 st.header("🤖 CapBot: AI-Powered Caption Generator", divider="rainbow")
 
@@ -34,6 +44,9 @@ if uploaded_file is None:
         captured_image = st.camera_input("Capture an image")
         if captured_image:
             uploaded_file = captured_image
+            # uploaded_file_bytes = uploaded_file.read()
+            # uploaded_file = Image.open(io.BytesIO(uploaded_file_bytes))
+
             st.success("Image captured successfully!")
 else:
     # st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
@@ -67,3 +80,38 @@ st.divider()
 st.subheader("Number of Captions")
 num_captions = st.slider("Select the number of captions", min_value=1, max_value=10, value=5)
 st.divider()
+
+
+# Input 5: User Input Prompts
+st.subheader("User Input Prompts")
+user_input_prompts = st.text_area("Enter the description or prompts for the image")
+st.divider()
+
+# Generate Captions
+if st.button("Generate Captions"):
+    if uploaded_file is None:
+        st.warning("Please upload an image or capture one.")
+
+    else:
+        st.write("Generating Captions...")
+
+        # Define prebuild prompts
+        complete_prompt = f'''{user_input_prompts}. Generate {num_captions} captions for the image for {social_media_platform} platform.
+        Analyse the image and generate creative captions for my social media post. Use some trending hashtags for the post. Don't give too
+        large captions. Keeps it short and simple. The image is related to {social_media_platform} platform.'''
+
+        # Convert uploaded image to bytes
+        image = Image.open(uploaded_file)
+
+        # Generate captions using gemini model
+        response = model.generate_content([complete_prompt,image],stream=True)
+        response.resolve()
+
+        # Ensure response is not None and has attribute 'text' before accessing it
+        if response is not None:  # Check if response exists
+            captions = response.text  # Access text data only if response is valid
+            st.write(captions)
+            st.success("Captions generated successfully!")
+        else:
+            st.error("Error: Failed to generate captions. Please try again.")
+        
