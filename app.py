@@ -89,7 +89,7 @@ st.divider()
 
 
 # Input 8: User Input Prompts
-st.subheader("User Input Prompts 🖊️")
+st.subheader("User Input Prompt 🖊️")
 user_input_prompts = st.text_area("Enter the description or prompt for the image")
 st.divider()
 
