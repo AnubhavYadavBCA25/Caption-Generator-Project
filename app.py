@@ -1,5 +1,4 @@
 import streamlit as st
-import requests
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
@@ -44,9 +43,6 @@ if uploaded_file is None:
         captured_image = st.camera_input("Capture an image")
         if captured_image:
             uploaded_file = captured_image
-            # uploaded_file_bytes = uploaded_file.read()
-            # uploaded_file = Image.open(io.BytesIO(uploaded_file_bytes))
-
             st.success("Image captured successfully!")
 else:
     # st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
@@ -69,36 +65,21 @@ creativity = col2.radio(
     "How creative do you want the captions to be?",
     ('Low', 'Medium', 'High')
 )
-# Map creativity level to temperature
-# creativity_map = {
-#     'Low':0.5,
-#     'Medium':0.75,
-#     'High':1.0
-# }
-# temperature = creativity_map[creativity]
 col2.divider()
 
 # Input 4: Emoji Usage
 col1.subheader("Emoji Usage 😎")
 emoji_usage = col1.radio("Do you want to use emojis in the captions?", ('Yes', 'No'))
-use_emojis = emoji_usage == 'Yes'
 col1.divider()
 
 # Input 5: Hashtags
 col2.subheader("Hashtags '#'")
 hashtags = col2.radio("Do you want to include hashtags in the captions?", ('Yes', 'No'))
-use_hashtags = hashtags == 'Yes'
 col2.divider()
 
 # Input 6: Size of the captions
 col1.subheader("Caption Length 📏")
-caption_length = col1.radio("Select the length of the captions", ('Short', 'Medium', 'Long'))
-caption_length_map = {
-    'Short': 50,
-    'Medium': 100,
-    'Long': 150
-}
-max_tokens = caption_length_map[caption_length]
+caption_length = col1.slider("Select the length of the captions", min_value=50, max_value=400, value=200, step=50)
 
 # Input 7: Number of Captions user wants
 col2.subheader("Number of Captions 7️⃣")
@@ -109,7 +90,7 @@ st.divider()
 
 # Input 8: User Input Prompts
 st.subheader("User Input Prompts 🖊️")
-user_input_prompts = st.text_area("Enter the description or prompts for the image")
+user_input_prompts = st.text_area("Enter the description or prompt for the image")
 st.divider()
 
 # Generate Captions
@@ -119,10 +100,11 @@ if st.button("Generate Captions"):
 
     else:
         # Define prebuild prompts
-        complete_prompt = f'''{user_input_prompts}. Generate {num_captions} captions for the image, for {social_media_platform} platform.
-        Analyse the image and generate creative captions for my social media post. Use some trending hashtags and emojies for the post. 
-        Use {max_tokens} words for each caption. Maintain the captions creativity level as {creativity}. The image is related to 
-        {social_media_platform} platform.'''
+        complete_prompt = f'''{user_input_prompts}. Generate {num_captions} captions for the image, for "{social_media_platform}" platform.
+        Analyse the image and generate creative captions for my social media post. Maintain the captions creativity 
+        level as "{creativity}". Give a short, bold and little large title for each caption. You need to use trending hashtags? Answer is "{hashtags}". 
+        You need to use Emojies for the post? Answer is strictly "{emoji_usage}". Use {caption_length} words for each caption. The cation should be related to 
+        {social_media_platform} platform. Maintain the space between each caption, so that user can able to read the captions more clearly.'''
 
         # Convert uploaded image to bytes
         image = Image.open(uploaded_file)
@@ -138,4 +120,3 @@ if st.button("Generate Captions"):
             st.success("Captions generated successfully!")
         else:
             st.error("Error: Failed to generate captions. Please try again.")
-        
