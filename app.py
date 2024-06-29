@@ -120,3 +120,19 @@ if st.button("Generate Captions"):
             st.success("Captions generated successfully!")
         else:
             st.error("Error: Failed to generate captions. Please try again.")
+
+## Footer ##
+st.markdown("---")
+st.markdown(
+    """
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <div style="text-align:center;">
+        <p>Made with ❤️ by Anubhav Yadav</p>
+        <p>Follow me on 
+            <a href="https://linkedin.com/in/anubhav-yadav-srm" target="_blank"><i class="fab fa-linkedin"></i>LinkedIn</a> | 
+            <a href="https://github.com/AnubhavYadavBCA25" target="_blank"><i class="fab fa-github"></i>GitHub</a> |
+            <a href="https://sites.google.com/view/anubhavyadavportfolio" target="_blank"><i class="fas fa-globe"></i>Portfolio Website</a>
+        </p>
+    </div>
+    """, unsafe_allow_html=True
+)
