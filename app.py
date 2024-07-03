@@ -3,15 +3,8 @@ from dotenv import load_dotenv
 import os
 import google.generativeai as genai
 from PIL import Image
-from IPython.display import Markdown
-import textwrap
 
 load_dotenv()
-
-# Function to convert text to markdown
-def to_markdown(text):
-  text = text.replace('•', '  *')
-  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
 
 # Set up the API key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -83,10 +76,9 @@ caption_length = col1.slider("Select the length of the captions", min_value=50, 
 
 # Input 7: Number of Captions user wants
 col2.subheader("Number of Captions 7️⃣")
-num_captions = col2.slider("Select the number of captions", min_value=1, max_value=10, value=5)
+num_captions = col2.slider("Select the number of captions", min_value=1, max_value=5, value=2)
 
 st.divider()
-
 
 # Input 8: User Input Prompts
 st.subheader("User Input Prompt 🖊️")
@@ -103,9 +95,12 @@ if st.button("Generate Captions"):
         complete_prompt = f'''{user_input_prompts}. Generate {num_captions} captions for the image, for "{social_media_platform}" platform.
         Analyse the image and generate creative captions for my social media post. Maintain the captions creativity level as "{creativity}". 
         Give a short, bold and little large title for each caption. You need to use trending hashtags? Answer is "{hashtags}". You need to 
-        use Emojies for the post? Answer is strictly "{emoji_usage}". Use {caption_length} words for each caption. The cation should be 
-        related to {social_media_platform} platform. Maintain the space between each caption, so that user can able to read the captions 
-        more clearly. First give caption number, then caption title and then the caption.'''
+        use Emojies for the post? Answer is strictly "{emoji_usage}". (IMPORTANT) Use {caption_length} words for each caption strictly, but
+        just remember that, when we give the caption length, then make caption {caption_length} words long (excluding hashtags) and give 
+        hashtags (if user asked) after making the caption as long as user want. The cation should be related to {social_media_platform} 
+        platform. Maintain the space between each caption, so that user can able to read the captions more clearly. (IMPORTANT) First write
+        "Generated Captions" as Heading, then give caption number (in next line), then caption title (in next line) and then the caption,
+        NOTE: FOLLOW THIS INSTRUCTION FOR EACH AND EVERY CAPTIONS.'''
 
         # Convert uploaded image to bytes
         image = Image.open(uploaded_file)
