@@ -13,4 +13,3 @@ In this project, we utilize GenAI (Google Gemini LLM), a powerful AI platform, t
     - google-generativeai: Library which is used to work with Google Gemini AI.
     - Image: To convert the uploaded image to Bolb object image. 
 
-## Step-by-Step Working
