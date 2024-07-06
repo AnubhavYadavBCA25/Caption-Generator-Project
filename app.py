@@ -94,10 +94,10 @@ if st.button("Generate Captions"):
         # Define prebuild prompts
         complete_prompt = f'''{user_input_prompts}. Generate {num_captions} captions for the image, for "{social_media_platform}" platform.
         Analyse the image and generate creative captions for my social media post. Maintain the captions creativity level as "{creativity}". 
-        Give a short, bold and little large title for each caption. You need to use trending hashtags? Answer is "{hashtags}". You need to 
-        use Emojies for the post? Answer is strictly "{emoji_usage}". (IMPORTANT) Use {caption_length} words for each caption strictly, but
-        just remember that, when we give the caption length, then make caption {caption_length} words long (excluding hashtags) and give 
-        hashtags (if user asked) after making the caption as long as user want. The cation should be related to {social_media_platform} 
+        Give a short, bold and little large title for each caption. You need to use trending hashtags? Answer is strictly "{hashtags}". You 
+        need to use Emojies for the post? Answer is strictly "{emoji_usage}". (IMPORTANT) Use {caption_length} words for each caption 
+        strictly, but just remember that, when we give the caption length, then make caption {caption_length} words long (excluding hashtags)
+        and give hashtags (if user asked) after making the caption as long as user want. The cation should be related to {social_media_platform} 
         platform. Maintain the space between each caption, so that user can able to read the captions more clearly. (IMPORTANT) First write
         "Generated Captions" as Heading, then give caption number (in next line), then caption title (in next line) and then the caption,
         NOTE: FOLLOW THIS INSTRUCTION FOR EACH AND EVERY CAPTIONS.'''
